@@ -1,26 +1,39 @@
-import React from 'react';
+import React, { useId, useState, useTransition } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const [isPending, startTransition] = useTransition();
+  const [count, setCount] = useState(0);
+  
+  function handleClick() {
+    setTimeout(()=>{
+      startTransition(() => {
+        setCount(c => c + 1);
+      })
+    }, 2000);
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+          <div>  {isPending && <div>Spinner </div>}</div>
+      <button onClick={handleClick}>{count}</button>
+     <Checkbox/>
     </div>
   );
 }
 
 export default App;
+
+
+function Checkbox() {
+  const id = useId();
+  console.log(id)
+  const id2 = useId();
+  console.log(id2)
+  return (
+    <>
+      <label htmlFor={id}>Do you like React?</label>
+      <input id={id} type="checkbox" name="react"/>
+    </>
+  );
+};
